@@ -126,6 +126,7 @@ func (s *DB) Close() error {
 func (s *DB) DB() *sql.DB {
 	db, ok := s.db.(*sql.DB)
 	if !ok {
+		//TODO SCH ERROR ?
 		panic("can't support full GORM on currently status, maybe this is a TX instance.")
 	}
 	return db

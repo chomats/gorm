@@ -75,6 +75,12 @@ func updateCallback(scope *Scope) {
 		} else {
 			for _, field := range scope.Fields() {
 				if scope.changeableField(field) {
+					//SCH-B fix blank value with default value in db
+					if field.HasDefaultValue && field.IsBlank {
+						sqls = append(sqls, fmt.Sprintf("%v = null", scope.Quote(field.DBName)))
+					} else
+					//SCH-E
+
 					if !field.IsPrimaryKey && field.IsNormal && (field.Name != "CreatedAt" || !field.IsBlank) {
 						if !field.IsForeignKey || !field.IsBlank || !field.HasDefaultValue {
 							sqls = append(sqls, fmt.Sprintf("%v = %v", scope.Quote(field.DBName), scope.AddToVars(field.Field.Interface())))
